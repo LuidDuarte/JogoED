@@ -86,7 +86,7 @@ int main() {
 				break;
 
 			default:
-				printf("Tela sem funcao");
+				printf("ta apertando nada, maluco?");
 				break;
 			}
 		}
