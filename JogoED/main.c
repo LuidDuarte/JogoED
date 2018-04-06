@@ -58,7 +58,7 @@ int main() {
 		al_flip_display();
 		al_wait_for_event(event_queue, &events);
 
-		if (events.type == ALLEGRO_EVENT_KEY_DOWN) {
+		if (events.type == ALLEGRO_EVENT_KEY_CHAR) {
 			switch (events.keyboard.keycode) {
 			case ALLEGRO_KEY_ESCAPE:
 				done = true;
@@ -66,23 +66,25 @@ int main() {
 				break;
 
 			case ALLEGRO_KEY_RIGHT:
-				if(xImagem != -576)
-					xImagem -= 48;
+				printf("%d\n", xImagem);
+				if(xImagem != -608)
+					xImagem -= 19;
 				break;
 
 			case ALLEGRO_KEY_LEFT:
 				if(xImagem != 0)
-					xImagem += 48;
+					xImagem += 19;
 				break;
 
 			case ALLEGRO_KEY_UP:
 				if(yImagem != 0)
-					yImagem += 48;
+					yImagem += 19;
 				break;
 
 			case ALLEGRO_KEY_DOWN:
-				if(yImagem != -240)
-					yImagem -= 48;
+				if(yImagem != -247)
+					yImagem -= 19;
+				printf("%d\n", yImagem);
 				break;
 
 			default:
