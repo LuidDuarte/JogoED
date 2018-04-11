@@ -7,6 +7,7 @@
 #include <allegro5\allegro_native_dialog.h>
 #include <allegro5\allegro_primitives.h>
 #include <allegro5\keyboard.h>
+#include <allegro5\timer.h>
 
 
 #define false 0 //caso o compilador seja antigo e ainda não tenha bool.
@@ -56,7 +57,6 @@ void carregaImagens(ALLEGRO_BITMAP *toe[]) {
 	
 }
 
-enum direcao { UP, DOWN, LEFT, RIGHT };
 void mapa(int);
 
 //variaveis globais
@@ -69,6 +69,9 @@ int main() {
 	int xImagem = 0;
 	int yImagem = 0;
 	int done = false;
+	double tempo1 = 0;
+	double tempo2 = 0;
+	
 	//Inicialização Allegro
 	al_init();
 	al_install_keyboard();
@@ -105,20 +108,20 @@ int main() {
 	int animacao = 0;
 	
 	while (!done) {
+		tempo1 = al_get_time();
 								//Essas subtrações são feitas para que o personagem fique ainda no meio da tela, e em cima do continente. 
 		al_draw_bitmap(imagem, xImagem-280, yImagem-50, 300,200);
 		al_draw_bitmap(toe[animacao], 320, 200, 0);
 		al_flip_display();
 		al_wait_for_event(event_queue, &events);
 
-		if (events.type == ALLEGRO_EVENT_KEY_CHAR) {
+		if (events.type == ALLEGRO_EVENT_KEY_CHAR && (tempo1-tempo2) > 0.05) {
 			switch (events.keyboard.keycode) {
 			case ALLEGRO_KEY_ESCAPE:
 				done = true;
 				break;
 
-			case ALLEGRO_KEY_RIGHT:			
-				
+			case ALLEGRO_KEY_RIGHT:		
 				if (animacao < 14 && animacao >= 9)
 					animacao++;
 				else if (animacao >= 14 || animacao < 9)
@@ -126,12 +129,10 @@ int main() {
 				if (map1[pwy][pwx+1] == 1) {
 					pwx++;
 					xImagem -= 50;
-					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
 				}
 				break;
 
 			case ALLEGRO_KEY_LEFT:
-
 				if (animacao < 26 && animacao >= 21)
 					animacao++;
 				else if (animacao >= 26 || animacao < 21)
@@ -139,12 +140,10 @@ int main() {
 				if (map1[pwy][pwx-1] == 1) {
 					pwx--;
 					xImagem += 50;
-					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
 				}
 				break;
 
 			case ALLEGRO_KEY_UP:
-
 				if (animacao < 8 && animacao >= 3)
 					animacao++;
 				else if (animacao >= 8 || animacao < 3)
@@ -152,12 +151,10 @@ int main() {
 				if (map1[pwy-1][pwx] == 1) {
 					pwy--;
 					yImagem += 50;
-					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
 				}
 				break;
 
 			case ALLEGRO_KEY_DOWN:
-
 				if (animacao < 20 && animacao >= 15)
 					animacao++;
 				else if (animacao >= 20 || animacao < 15)
@@ -165,14 +162,14 @@ int main() {
 				if (map1[pwy+1][pwx] == 1) {
 					pwy++;
 					yImagem -= 50;
-					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
 				}
 				break;
 
 			default:
 				printf("Tecla sem funcao");
-				break;
+				break;	
 			}
+			tempo2 = al_get_time();
 		}
 	}
 
