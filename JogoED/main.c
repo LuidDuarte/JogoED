@@ -60,12 +60,12 @@ enum direcao { UP, DOWN, LEFT, RIGHT };
 void mapa(int);
 
 //variaveis globais
-int map1[13][26];
+int map1[16][30];
 
 
-int main() {
-	int pwx = 0;
-	int pwy = 0;
+int main() { 
+	int pwx = 12;
+	int pwy = 5;
 	int xImagem = 0;
 	int yImagem = 0;
 	int done = false;
@@ -97,16 +97,16 @@ int main() {
 
 	ALLEGRO_EVENT events;
 	mapa(1);
-	imagem = al_load_bitmap("..\\imagens\\fase1.bmp");
+	imagem = al_load_bitmap("..\\imagens\\1500x800fase1.png");
 	carregaImagens(toe);
 
 	
 
 	int animacao = 0;
-
+	
 	while (!done) {
-
-		al_draw_bitmap(imagem, xImagem, yImagem, 0);
+								//Essas subtrações são feitas para que o personagem fique ainda no meio da tela, e em cima do continente. 
+		al_draw_bitmap(imagem, xImagem-280, yImagem-50, 300,200);
 		al_draw_bitmap(toe[animacao], 320, 200, 0);
 		al_flip_display();
 		al_wait_for_event(event_queue, &events);
@@ -118,39 +118,55 @@ int main() {
 				break;
 
 			case ALLEGRO_KEY_RIGHT:			
+				
 				if (animacao < 14 && animacao >= 9)
 					animacao++;
 				else if (animacao >= 14 || animacao < 9)
 					animacao = 9;
-				if(xImagem != -608)
-					xImagem -= 19;
+				if (map1[pwy][pwx+1] == 1) {
+					pwx++;
+					xImagem -= 50;
+					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
+				}
 				break;
 
 			case ALLEGRO_KEY_LEFT:
+
 				if (animacao < 26 && animacao >= 21)
 					animacao++;
 				else if (animacao >= 26 || animacao < 21)
 					animacao = 21;
-				if(xImagem != 0)
-					xImagem += 19;
+				if (map1[pwy][pwx-1] == 1) {
+					pwx--;
+					xImagem += 50;
+					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
+				}
 				break;
 
 			case ALLEGRO_KEY_UP:
+
 				if (animacao < 8 && animacao >= 3)
 					animacao++;
 				else if (animacao >= 8 || animacao < 3)
 					animacao = 3;
-				if(yImagem != 0)
-					yImagem += 19;
+				if (map1[pwy-1][pwx] == 1) {
+					pwy--;
+					yImagem += 50;
+					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
+				}
 				break;
 
 			case ALLEGRO_KEY_DOWN:
+
 				if (animacao < 20 && animacao >= 15)
 					animacao++;
 				else if (animacao >= 20 || animacao < 15)
 					animacao = 15;
-				if(yImagem != -247)
-					yImagem -= 19;
+				if (map1[pwy+1][pwx] == 1) {
+					pwy++;
+					yImagem -= 50;
+					printf("mapa[%d][%d] = %d \n", pwy, pwx, map1[pwy][pwx]);
+				}
 				break;
 
 			default:
@@ -166,26 +182,32 @@ int main() {
 	return 0;
 }
 
-void mapa(mod) {
+void mapa(mood) {
 	int i, j;
-	char mp[13][26] = {
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,0 },
-		{ 0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0 },
-		{ 0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0 },
-		{ 0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0 },
-		{ 0,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0 },
-		{ 0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0 },
-		{ 0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0 },
-		{ 0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+	char mp[16][30] = {
+
+		//	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29
+/*0  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
+/*1  */	{   0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
+/*2  */ {	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
+/*3  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	1,	1,	1,	0,	0,	0,	0,	1,	1,	1,	1,	1,	0,	0,	0 },
+/*4  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0 },
+/*5  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0 },
+/*6  */	{	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0 },
+/*7  */	{	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0 },
+/*8  */	{	0,	0,	0,	0,	1,	1,	1,	1,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0 },
+/*9 */	{	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0 },
+/*10*/	{	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0 },
+/*11*/	{	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0 },
+/*12*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
+/*13*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
+/*14*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
+/*15*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}
 	};
-	for (i = 0; i < 13; i++) {
-		for (j = 0; j < 26; j++) {
-			if (mod) map1[i][j] = mp[i][j];
+	for (i = 0; i < 16; i++) {
+		for (j = 0; j < 30; j++) {
+			if(mood == 1)
+				map1[i][j] = mp[i][j];
 		}
 	}
 
