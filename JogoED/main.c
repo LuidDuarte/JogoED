@@ -9,14 +9,13 @@
 #include <allegro5\keyboard.h>
 #include <allegro5\timer.h>
 #include "personagem.h"
+#include "mapa.h"
 
 
 
 #define false 0 //caso o compilador seja antigo e ainda não tenha bool.
 #define true 1
 #define FPS 60
-
-void mapa(int);
 
 //variaveis globais
 int map1[16][30];
@@ -26,8 +25,11 @@ int main() {
 	personagem p;
 	p.x = 12;
 	p.y = 5;
-	int xImagem = 0;
-	int yImagem = 0;
+
+	mapa m;
+	m.x = -280; //Para que no centro, onde ficará o personagem, tenha continente.
+	m.y = -50;
+
 	int done = false;
 	double tempo1 = 0;
 	double tempo2 = 0;
@@ -39,7 +41,6 @@ int main() {
 	//Variáveis Allegro
 	ALLEGRO_DISPLAY* janela = al_create_display(800, 600);
 	ALLEGRO_BITMAP *buffer = NULL;
-	ALLEGRO_BITMAP *imagem = NULL;
 	ALLEGRO_BITMAP *moldura = NULL;
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
 	ALLEGRO_KEYBOARD_STATE keyState;
@@ -59,8 +60,8 @@ int main() {
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
 	ALLEGRO_EVENT events;
-	mapa(1);
-	imagem = al_load_bitmap("..\\imagens\\1500x800fase1.png");
+	mapaMatriz(1);
+	m.imagem = al_load_bitmap("..\\imagens\\1500x800fase1.png");
 	moldura = al_load_bitmap("..\\imagens\\moldura.png");
 	carregaEarl(&p);
 
@@ -70,8 +71,7 @@ int main() {
 	
 	while (!done) {
 		tempo1 = al_get_time();
-								//Essas subtrações são feitas para que o personagem fique ainda no meio da tela, e em cima do continente. 
-		al_draw_bitmap(imagem, xImagem-280, yImagem-50, 0);
+		al_draw_bitmap(m.imagem, m.x, m.y, 0);
 		al_draw_bitmap(p.personagem[animacao], 320, 200, 0);
 		al_draw_bitmap(moldura, 0, 0, 0);
 		al_flip_display();
@@ -90,7 +90,7 @@ int main() {
 					animacao = 9;
 				if (map1[p.y][p.x+1] == 1) {
 					p.x++;
-					xImagem -= 50;
+					m.x -= 50;
 				}
 				break;
 
@@ -101,7 +101,7 @@ int main() {
 					animacao = 21;
 				if (map1[p.y][p.x-1] == 1) {
 					p.x--;
-					xImagem += 50;
+					m.x += 50;
 				}
 				break;
 
@@ -112,7 +112,7 @@ int main() {
 					animacao = 3;
 				if (map1[p.y-1][p.x] == 1) {
 					p.y--;
-					yImagem += 50;
+					m.y += 50;
 				}
 				break;
 
@@ -123,7 +123,7 @@ int main() {
 					animacao = 15;
 				if (map1[p.y+1][p.x] == 1) {
 					p.y++;
-					yImagem -= 50;
+					m.y -= 50;
 				}
 				break;
 
@@ -139,35 +139,4 @@ int main() {
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(janela);
 	return 0;
-}
-
-void mapa(mood) {
-	int i, j;
-	char mp[16][30] = {
-
-		//	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29
-/*0  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
-/*1  */	{   0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
-/*2  */ {	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
-/*3  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	1,	1,	1,	0,	0,	0,	0,	1,	1,	1,	1,	1,	0,	0,	0 },
-/*4  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0 },
-/*5  */	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0 },
-/*6  */	{	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0 },
-/*7  */	{	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0 },
-/*8  */	{	0,	0,	0,	1,	1,	1,	1,	1,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0 },
-/*9 */	{	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0 },
-/*10*/	{	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0 },
-/*11*/	{	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0 },
-/*12*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
-/*13*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
-/*14*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 },
-/*15*/	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0}
-	};
-	for (i = 0; i < 16; i++) {
-		for (j = 0; j < 30; j++) {
-			if(mood == 1)
-				map1[i][j] = mp[i][j];
-		}
-	}
-
 }
