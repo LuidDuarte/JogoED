@@ -147,11 +147,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="item.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="mapa.c" />
     <ClCompile Include="personagem.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="item.h" />
     <ClInclude Include="mapa.h" />
     <ClInclude Include="personagem.h" />
   </ItemGroup>

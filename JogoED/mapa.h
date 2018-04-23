@@ -1,5 +1,4 @@
 #include <allegro5\allegro.h>
-
 #ifndef MAPA_H
 #define MAPA_H
 typedef struct mapa {

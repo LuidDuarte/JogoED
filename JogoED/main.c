@@ -10,6 +10,7 @@
 #include <allegro5\timer.h>
 #include "personagem.h"
 #include "mapa.h"
+#include "item.h"
 
 
 
@@ -21,13 +22,32 @@
 int map1[16][30];
 
 
-int main() { 	
+int main() { 
+	no presente;
+	presente.objeto.cY = 200;
+	presente.objeto.cX = 350;
+	presente.objeto.mX = 12;
+	presente.objeto.mY = 5;
+	presente.prox = NULL;
+
+	no boombox;
+	boombox.objeto.cY = 350;
+	boombox.objeto.cX = 650;
+	boombox.objeto.mX = 19;
+	boombox.objeto.mY = 8;
+	boombox.prox = &presente;
+	
+
+	lista pegar, inventario;
+	pegar = &boombox;
+
+	inventario = NULL;
 	personagem p;
 	p.x = 12;
 	p.y = 5;
 
 	mapa m;
-	m.x = -280; //Para que no centro, onde ficará o personagem, tenha continente.
+	m.x = -250; //Para que no centro, onde ficará o personagem, tenha continente. (lembrar sempre disso quando comparar posições na matriz, somar esses números e dividir por 50)
 	m.y = -50;
 
 	int done = false;
@@ -63,68 +83,86 @@ int main() {
 	mapaMatriz(1);
 	m.imagem = al_load_bitmap("..\\imagens\\1500x800fase1.png");
 	moldura = al_load_bitmap("..\\imagens\\moldura.png");
-	carregaEarl(&p);
+	boombox.objeto.item = al_load_bitmap("..\\imagens\\itens\\boombox.png");
+	presente.objeto.item = al_load_bitmap("..\\imagens\\itens\\presente1.png");
+	carregaToeJam(&p);
 
-	
+	p.animacao = 0;
 
-	int animacao = 0;
-	
 	while (!done) {
+		no* aux = pegar;
 		tempo1 = al_get_time();
 		al_draw_bitmap(m.imagem, m.x, m.y, 0);
-		al_draw_bitmap(p.personagem[animacao], 320, 200, 0);
+		if (pegar != NULL){
+			while(aux != NULL){
+				al_draw_bitmap(aux->objeto.item, aux->objeto.cX, aux->objeto.cY, 0);
+				aux = aux->prox;
+			}
+		}
+		al_draw_bitmap(p.personagem[p.animacao], 320, 200, 0);
 		al_draw_bitmap(moldura, 0, 0, 0);
 		al_flip_display();
 		al_wait_for_event(event_queue, &events);
 
-		if (events.type == ALLEGRO_EVENT_KEY_CHAR && (tempo1-tempo2) > 0.05) {
+		if (events.type == ALLEGRO_EVENT_KEY_CHAR && (tempo1-tempo2) > 0.1) {
 			switch (events.keyboard.keycode) {
 			case ALLEGRO_KEY_ESCAPE:
 				done = true;
 				break;
 
 			case ALLEGRO_KEY_RIGHT:		
-				if (animacao < 14 && animacao >= 9)
-					animacao++;
-				else if (animacao >= 14 || animacao < 9)
-					animacao = 9;
+				if (p.animacao < 14 && p.animacao >= 9)
+					p.animacao++;
+				else if (p.animacao >= 14 || p.animacao < 9)
+					p.animacao = 9;
 				if (map1[p.y][p.x+1] == 1) {
 					p.x++;
 					m.x -= 50;
+					moveItens(&pegar, -50, 0);
+					verificaPegouItem(p, &pegar, &inventario);
 				}
 				break;
 
 			case ALLEGRO_KEY_LEFT:
-				if (animacao < 26 && animacao >= 21)
-					animacao++;
-				else if (animacao >= 26 || animacao < 21)
-					animacao = 21;
+				if (p.animacao < 26 && p.animacao >= 21)
+					p.animacao++;
+				else if (p.animacao >= 26 || p.animacao < 21)
+					p.animacao = 21;
 				if (map1[p.y][p.x-1] == 1) {
 					p.x--;
 					m.x += 50;
+					moveItens(&pegar, 50, 0);
+					verificaPegouItem(p, &pegar, &inventario);
 				}
 				break;
 
 			case ALLEGRO_KEY_UP:
-				if (animacao < 8 && animacao >= 3)
-					animacao++;
-				else if (animacao >= 8 || animacao < 3)
-					animacao = 3;
+				if (p.animacao < 8 && p.animacao >= 3)
+					p.animacao++;
+				else if (p.animacao >= 8 || p.animacao < 3)
+					p.animacao = 3;
 				if (map1[p.y-1][p.x] == 1) {
 					p.y--;
 					m.y += 50;
+					moveItens(&pegar, 0, 50);
+					verificaPegouItem(p, &pegar, &inventario);
 				}
 				break;
 
 			case ALLEGRO_KEY_DOWN:
-				if (animacao < 20 && animacao >= 15)
-					animacao++;
-				else if (animacao >= 20 || animacao < 15)
-					animacao = 15;
+				if (p.animacao < 20 && p.animacao >= 15)
+					p.animacao++;
+				else if (p.animacao >= 20 || p.animacao < 15)
+					p.animacao = 15;
 				if (map1[p.y+1][p.x] == 1) {
 					p.y++;
 					m.y -= 50;
+					moveItens(&pegar, 0, -50);
+					verificaPegouItem(p, &pegar, &inventario);
 				}
+				break;
+			case ALLEGRO_KEY_L:
+				system("cls");
 				break;
 
 			default:
@@ -134,7 +172,6 @@ int main() {
 			tempo2 = al_get_time();
 		}
 	}
-
 
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(janela);
