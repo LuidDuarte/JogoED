@@ -20,7 +20,7 @@ typedef struct no {
 typedef no* lista;
 
 void verificaPegouItem(personagem p, lista *pegar, lista *inventario);
-void remover(lista *l, no *n);
+void removerNo(lista *l, no *n);
 void adicionaNo(lista *l, no *n);
 void moveItens(lista *pegar, int x, int y);
 

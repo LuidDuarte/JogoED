@@ -3,25 +3,21 @@
 #include "personagem.h"
 
 void verificaPegouItem(personagem p, lista *pegar, lista *inventario) {
-	system("cls");
-	printf("\nP = [%d][%d]\n", p.x, p.y);
 	no *aux = *pegar;
 	bool pegou = false;
 	while ((aux != NULL) && (pegou == false)) {		
-		printf("I = [%d][%d]\n", (aux->objeto.mX), (aux->objeto.mY));
 		if ((aux->objeto.mX == p.x) && (aux->objeto.mY == p.y)) {
-			remover(pegar, aux);
-			pegou = true;			
+			adicionaNo(inventario, aux);
+			removerNo(pegar, aux);
+			pegou = true;
 		}
 		else aux = aux->prox;
 	}
 }
-void remover(lista *l, no *n) {
+void removerNo(lista *l, no *n) {
 	no *aux = *l;
-	printf("[%d][%d]", n->objeto.mX, n->objeto.mX);
 	if (n == *l) { //Primeiro da lista
 	*l = aux->prox;
-
 	}
 	else {
 		bool removeu = false;
@@ -30,7 +26,6 @@ void remover(lista *l, no *n) {
 			aux = aux->prox;
 		}
 		aux->prox = n->prox;
-
 	}
 }
 
@@ -46,5 +41,18 @@ void moveItens(lista *pegar, int x, int y) {
 
 
 void adicionaNo(lista *l, no *n) {
+	no *aux = n;
+	if (*l == NULL) {
+		aux->prox = NULL;
+		*l = aux;
+	}
+	else {
+		aux = *l;
+		while (aux->prox != NULL) 
+			aux = aux->prox;
+		
+		n->prox = aux->prox;
+		aux->prox = n;
+	}
 
 }
