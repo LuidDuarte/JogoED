@@ -28,6 +28,8 @@ int main() {
 	presente.objeto.cX = 350;
 	presente.objeto.mX = 12;
 	presente.objeto.mY = 5;
+	presente.objeto.bX = posXPegar+55;
+	presente.objeto.bY = posYPegar;
 	presente.prox = NULL;
 
 	no boombox;
@@ -35,6 +37,8 @@ int main() {
 	boombox.objeto.cX = 650;
 	boombox.objeto.mX = 19;
 	boombox.objeto.mY = 8;
+	boombox.objeto.bX = posXPegar;
+	boombox.objeto.bY = posYPegar;
 	boombox.prox = &presente;
 	
 
@@ -96,6 +100,7 @@ int main() {
 		mostraItemMapa(&pegar);
 		al_draw_bitmap(p.personagem[p.animacao], 320, 200, 0);
 		al_draw_bitmap(moldura, 0, 0, 0);
+		mostraListaInventario(&pegar);
 		mostraListaInventario(&inventario);
 		al_flip_display();
 		al_wait_for_event(event_queue, &events);

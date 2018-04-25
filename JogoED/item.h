@@ -3,18 +3,22 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-typedef struct obj { // cY e cX são em PX's 
+typedef struct obj { 
+	//Coordenada mapa;
 	int cY;
 	int cX;
 	//posição na matriz
 	int mY;
 	int mX;
+	//Coordenada x,y (em px) para borda
+	int bY;
+	int bX;
 	ALLEGRO_BITMAP *item;
 
 }obj;
 
-static int posXPegar = 300;
-static int posYPegar = 640;
+static int posXPegar = 355;
+static int posYPegar = 430;
 static int posXInvetario = 475;
 static int posYInvetario = 535;
 typedef struct no {
