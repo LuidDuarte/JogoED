@@ -93,14 +93,10 @@ int main() {
 		no* aux = pegar;
 		tempo1 = al_get_time();
 		al_draw_bitmap(m.imagem, m.x, m.y, 0);
-		if (pegar != NULL){
-			while(aux != NULL){
-				al_draw_bitmap(aux->objeto.item, aux->objeto.cX, aux->objeto.cY, 0);
-				aux = aux->prox;
-			}
-		}
+		mostraItemMapa(&pegar);
 		al_draw_bitmap(p.personagem[p.animacao], 320, 200, 0);
 		al_draw_bitmap(moldura, 0, 0, 0);
+		mostraListaInventario(&inventario);
 		al_flip_display();
 		al_wait_for_event(event_queue, &events);
 

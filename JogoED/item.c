@@ -5,10 +5,13 @@
 void verificaPegouItem(personagem p, lista *pegar, lista *inventario) {
 	no *aux = *pegar;
 	bool pegou = false;
-	while ((aux != NULL) && (pegou == false)) {		
+	printf("\nP = [%d][%d]\n", p.x, p.y);
+	while ((aux != NULL) && (pegou == false)) {	
+		printf("G = [%d][%d]\n", aux->objeto.mX, aux->objeto.mY);
 		if ((aux->objeto.mX == p.x) && (aux->objeto.mY == p.y)) {
-			adicionaNo(inventario, aux);
+			no *aux2 = aux;
 			removerNo(pegar, aux);
+			adicionaNo(inventario, aux2);
 			pegou = true;
 		}
 		else aux = aux->prox;
@@ -17,6 +20,7 @@ void verificaPegouItem(personagem p, lista *pegar, lista *inventario) {
 void removerNo(lista *l, no *n) {
 	no *aux = *l;
 	if (n == *l) { //Primeiro da lista
+	printf("irrul");
 	*l = aux->prox;
 	}
 	else {
@@ -26,6 +30,7 @@ void removerNo(lista *l, no *n) {
 			aux = aux->prox;
 		}
 		aux->prox = n->prox;
+	
 	}
 }
 
@@ -39,9 +44,12 @@ void moveItens(lista *pegar, int x, int y) {
 	}
 }
 
-
 void adicionaNo(lista *l, no *n) {
 	no *aux = n;
+	aux->objeto.cX = posXInvetario;
+	aux->objeto.cY = posYInvetario;
+	posXInvetario += 55;
+
 	if (*l == NULL) {
 		aux->prox = NULL;
 		*l = aux;
@@ -55,4 +63,24 @@ void adicionaNo(lista *l, no *n) {
 		aux->prox = n;
 	}
 
+}
+
+void mostraListaInventario(lista *l) {
+	no *aux = *l;
+	if (l != NULL) {
+		while (aux != NULL) {
+			al_draw_bitmap(aux->objeto.item, aux->objeto.cX, aux->objeto.cY, 0);
+			aux = aux->prox;
+		}
+	}
+}
+
+void mostraItemMapa(lista *l) {
+	no *aux = *l;
+	if (l != NULL) {
+		while (aux != NULL) {
+			al_draw_bitmap(aux->objeto.item, aux->objeto.cX, aux->objeto.cY, 0);
+			aux = aux->prox;
+		}
+	}
 }
