@@ -89,7 +89,7 @@ int main() {
 	moldura = al_load_bitmap("..\\imagens\\moldura.png");
 	boombox.objeto.item = al_load_bitmap("..\\imagens\\itens\\boombox.png");
 	presente.objeto.item = al_load_bitmap("..\\imagens\\itens\\presente1.png");
-	carregaToeJam(&p);
+	carregaEarl(&p);
 
 	p.animacao = 0;
 
