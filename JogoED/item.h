@@ -31,9 +31,10 @@ typedef no* lista;
 void verificaPegouItem(personagem p, lista *pegar, lista *inventario);
 void removerNo(lista *l, no *n);
 void adicionaNo(lista *l, no *n);
+void mudaNo(lista *l, no *n);
 void moveItens(lista *pegar, int x, int y);
 void mostraItemMapa(lista *l);
 void mostraListaInventario(lista *l);
-
+void inicializaLista(lista *l);
 
 #endif // !ITEM_H

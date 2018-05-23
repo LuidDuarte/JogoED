@@ -9,7 +9,7 @@ void verificaPegouItem(personagem p, lista *pegar, lista *inventario) {
 		if ((aux->objeto.mX == p.x) && (aux->objeto.mY == p.y)) {
 			no *aux2 = aux;
 			removerNo(pegar, aux);
-			adicionaNo(inventario, aux2);
+			mudaNo(inventario, aux2);
 			pegou = true;
 		}
 		else aux = aux->prox;
@@ -46,9 +46,9 @@ void moveItens(lista *pegar, int x, int y) {
 
 void adicionaNo(lista *l, no *n) {
 	no *aux = n;
-	aux->objeto.bX = posXInvetario;
-	aux->objeto.bY = posYInvetario;
-	posXInvetario += 55;
+	aux->objeto.bX = posXPegar;
+	aux->objeto.bY = posYPegar;
+	posXPegar += 55;
 
 	if (*l == NULL) {
 		aux->prox = NULL;
@@ -59,6 +59,27 @@ void adicionaNo(lista *l, no *n) {
 		while (aux->prox != NULL) 
 			aux = aux->prox;
 		
+		n->prox = aux->prox;
+		aux->prox = n;
+	}
+
+}
+
+void mudaNo(lista *l, no *n) {
+	no *aux = n;
+	aux->objeto.bX = posXInvetario;
+	aux->objeto.bY = posYInvetario;
+	posXInvetario += 55;
+
+	if (*l == NULL) {
+		aux->prox = NULL;
+		*l = aux;
+	}
+	else {
+		aux = *l;
+		while (aux->prox != NULL)
+			aux = aux->prox;
+
 		n->prox = aux->prox;
 		aux->prox = n;
 	}
@@ -83,4 +104,8 @@ void mostraItemMapa(lista *l) {
 			aux = aux->prox;
 		}
 	}
+}
+
+void inicializaLista(lista *l) {
+	*l = NULL;
 }
