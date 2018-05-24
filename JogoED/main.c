@@ -19,7 +19,7 @@
 #define FPS 60
 
 //variaveis globais
-int map1[16][30];
+
 enum {
 	_MENU,
 	_JOGO
@@ -27,26 +27,15 @@ enum {
 
 
 int main() { 
-	no presente;
-	presente.objeto.cY = 200;
-	presente.objeto.cX = 350;
-	presente.objeto.mX = 12;
-	presente.objeto.mY = 5;
-
-
-	no boombox;
-	boombox.objeto.cY = 350;
-	boombox.objeto.cX = 650;
-	boombox.objeto.mX = 19;
-	boombox.objeto.mY = 8;
-	
+	srand(time(NULL));
+	//Inicializa��o Allegro
+	al_init();
+	al_install_keyboard();
+	al_install_mouse();
 
 	lista pegar, inventario;
 	inicializaLista(&pegar);
 	inicializaLista(&inventario);
-
-	adicionaNo(&pegar, &presente);
-	adicionaNo(&pegar, &boombox);
 
 	personagem p;
 	p.x = 12;
@@ -60,11 +49,6 @@ int main() {
 	double tempo1 = 0;
 	double tempo2 = 0;
 	
-	//Inicializa��o Allegro
-	al_init();
-	al_install_keyboard();
-	al_install_mouse();
-
 	//Inicializa��o Addons
 	al_init_image_addon();
 	al_init_primitives_addon();
@@ -95,11 +79,9 @@ int main() {
 	menuT= al_load_bitmap("D:\\3o Semestre\\ED\\Jogo\\JogoED\\imagens\\ilhatoe.png");
 	menuE= al_load_bitmap("D:\\3o Semestre\\ED\\Jogo\\JogoED\\imagens\\ilhaearl.png");
 
-	mapaMatriz(1);
+
 	m.imagem = al_load_bitmap("..\\imagens\\1500x800fase1.png");
 	moldura = al_load_bitmap("..\\imagens\\moldura.png");
-	boombox.objeto.item = al_load_bitmap("..\\imagens\\itens\\boombox.png");
-	presente.objeto.item = al_load_bitmap("..\\imagens\\itens\\presente1.png");
 	carregaEarl(&p);
 
 	p.animacao = 0;
@@ -111,6 +93,11 @@ int main() {
 	
 	al_start_timer(timer);
 
+
+	for (int i = 0; i <= 5; i++) {
+		adicionaNo(&pegar, criaNo());
+	}
+	
 
 	while (!done) {
 		if (ESTADO == _MENU) {

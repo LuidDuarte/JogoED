@@ -1,6 +1,8 @@
 #include "item.h"
+#include "mapa.h"
 #include <allegro5\allegro.h>
 #include "personagem.h"
+#include <time.h>
 
 void verificaPegouItem(personagem p, lista *pegar, lista *inventario) {
 	no *aux = *pegar;
@@ -15,6 +17,7 @@ void verificaPegouItem(personagem p, lista *pegar, lista *inventario) {
 		else aux = aux->prox;
 	}
 }
+
 void removerNo(lista *l, no *n) {
 	no *aux = *l;
 	if (n == *l) { //Primeiro da lista
@@ -28,12 +31,11 @@ void removerNo(lista *l, no *n) {
 		}
 		aux->prox = n->prox;
 	}
-	while (aux->prox != NULL) {
-		aux->prox->objeto.bX -= 55;
-		aux = aux->prox;
+	while (n->prox != NULL) {
+		n->prox->objeto.bX -= 55;
+		n = n->prox;
 	}
 }
-
 
 void moveItens(lista *pegar, int x, int y) {
 	no *aux = *pegar;
@@ -108,4 +110,52 @@ void mostraItemMapa(lista *l) {
 
 void inicializaLista(lista *l) {
 	*l = NULL;
+}
+
+no *criaNo() {
+	int mY, mX;
+	do{
+		mY = rand() % 17;
+		mX = rand() % 31;
+	} while (map1[mY][mX] == 0);
+
+	no *novoNo;
+
+	novoNo = (no*)malloc(sizeof(no));
+
+	novoNo->objeto.mX = mX;
+	novoNo->objeto.mY = mY;
+
+	novoNo->objeto.cX = (mX*50)-250;
+	novoNo->objeto.cY = (mY*50)-50;
+
+	int item = rand()%7;
+	switch (item) {
+		case 0: 
+			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\boombox.png");
+			break;
+		case 1:
+			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente1.png");
+			break;
+		case 2:
+			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\batata.png");
+			break;
+		case 3:
+			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\bolo.png");
+			break;
+		case 4:
+			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\dinheiro.png");
+			break;
+		case 5:
+			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente2.png");
+			break;
+		case 6:
+			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente3.png");
+			break;
+
+		default:
+			printf("Erro no rand");
+	}
+	printf("mX = %d\nmY = %d\ncX = %d\ncY = %d", novoNo->objeto.mX,novoNo->objeto.mY, novoNo->objeto.cX,novoNo->objeto.cY);
+	return (novoNo);
 }

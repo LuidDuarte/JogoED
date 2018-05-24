@@ -8,6 +8,4 @@ typedef struct mapa {
 }mapa;
 
 extern int map1[16][30];
-
-void mapaMatriz(int);
 #endif

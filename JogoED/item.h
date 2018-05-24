@@ -36,5 +36,6 @@ void moveItens(lista *pegar, int x, int y);
 void mostraItemMapa(lista *l);
 void mostraListaInventario(lista *l);
 void inicializaLista(lista *l);
+no *criaNo();
 
 #endif // !ITEM_H
