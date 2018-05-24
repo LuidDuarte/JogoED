@@ -1,4 +1,4 @@
-#include "item.h"
+﻿#include "item.h"
 #include "mapa.h"
 #include <allegro5\allegro.h>
 #include "personagem.h"
@@ -112,7 +112,7 @@ void inicializaLista(lista *l) {
 	*l = NULL;
 }
 
-no *criaNo() {
+no *criaNo(int listaPegar) {
 	int mY, mX;
 	do{
 		mY = rand() % 17;
@@ -130,32 +130,60 @@ no *criaNo() {
 	novoNo->objeto.cY = (mY*50)-50;
 
 	int item = rand()%7;
-	switch (item) {
-		case 0: 
-			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\boombox.png");
-			break;
-		case 1:
-			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente1.png");
-			break;
-		case 2:
-			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\batata.png");
-			break;
-		case 3:
-			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\bolo.png");
-			break;
-		case 4:
-			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\dinheiro.png");
-			break;
-		case 5:
-			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente2.png");
-			break;
-		case 6:
-			novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente3.png");
-			break;
+	if(listaPegar){
+		switch (item) {
+			case 0: 
+				novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\boombox.png");
+				break;
+			case 1:
+				novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente1.png");
+				break;
+			case 2:
+				novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\batata.png");
+				break;
+			case 3:
+				novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\bolo.png");
+				break;
+			case 4:
+				novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\dinheiro.png");
+				break;
+			case 5:
+				novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente2.png");
+				break;
+			case 6:
+				novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\presente3.png");
+				break;
 
-		default:
-			printf("Erro no rand");
+			default:
+				printf("Erro no rand");
+		}
 	}
-	printf("mX = %d\nmY = %d\ncX = %d\ncY = %d", novoNo->objeto.mX,novoNo->objeto.mY, novoNo->objeto.cX,novoNo->objeto.cY);
+	else 
+		novoNo->objeto.item = al_load_bitmap("..\\imagens\\itens\\elevador.png");
+
 	return (novoNo);
+}
+
+void inicializaGame(lista *pegar, lista *final, lista *inventario, mapa *m, personagem *p ) {
+	inicializaLista(pegar);
+	inicializaLista(inventario);
+	inicializaLista(final);
+	
+	p->x = 12;
+	p->y = 5;
+	
+	m->x = -250; //Para que no centro, onde ficar� o personagem, tenha continente. (lembrar sempre disso quando comparar posi��es na matriz, somar esses n�meros e dividir por 50)
+	m->y = -50;
+
+	posXPegar = 355;
+	posYPegar = 430;
+	posXInvetario = 475;
+	posYInvetario = 535;
+
+
+	for (int i = 0; i <= 5; i++) {
+		adicionaNo(pegar, criaNo(1));
+	}
+	adicionaNo(final, criaNo(0));
+
 }

@@ -1,5 +1,6 @@
 #include <allegro5\allegro.h>
 #include "personagem.h"
+#include "mapa.h"
 #ifndef ITEM_H
 #define ITEM_H
 
@@ -36,6 +37,7 @@ void moveItens(lista *pegar, int x, int y);
 void mostraItemMapa(lista *l);
 void mostraListaInventario(lista *l);
 void inicializaLista(lista *l);
-no *criaNo();
+no *criaNo(int listaPegar);
+void inicializaGame(lista*, lista*, lista*, mapa*,  personagem*);
 
 #endif // !ITEM_H

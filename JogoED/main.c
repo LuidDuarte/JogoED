@@ -33,9 +33,10 @@ int main() {
 	al_install_keyboard();
 	al_install_mouse();
 
-	lista pegar, inventario;
+	lista pegar, inventario, final;
 	inicializaLista(&pegar);
 	inicializaLista(&inventario);
+	inicializaLista(&final);
 
 	personagem p;
 	p.x = 12;
@@ -82,7 +83,6 @@ int main() {
 
 	m.imagem = al_load_bitmap("..\\imagens\\1500x800fase1.png");
 	moldura = al_load_bitmap("..\\imagens\\moldura.png");
-	carregaEarl(&p);
 
 	p.animacao = 0;
 
@@ -95,9 +95,9 @@ int main() {
 
 
 	for (int i = 0; i <= 5; i++) {
-		adicionaNo(&pegar, criaNo());
+		adicionaNo(&pegar, criaNo(1));
 	}
-	
+	adicionaNo(&final, criaNo(0));
 
 	while (!done) {
 		if (ESTADO == _MENU) {
@@ -136,10 +136,19 @@ int main() {
 			}
 			
 		}
-		else if (ESTADO == _JOGO){
-			no* aux = pegar;
+
+		else if (ESTADO == _JOGO) {
 			tempo1 = al_get_time();
 			al_draw_bitmap(m.imagem, m.x, m.y, 0);
+			if (pegar == NULL) {
+				mostraItemMapa(&final);
+				if (final->objeto.mX == p.x && final->objeto.mY == p.y) {
+				ESTADO = _MENU;
+				inicializaGame(&pegar, &final, &inventario, &m, &p);
+				menuatual = menu;
+				}
+			}
+
 			mostraItemMapa(&pegar);
 			al_draw_bitmap(p.personagem[p.animacao], 320, 200, 0);
 			al_draw_bitmap(moldura, 0, 0, 0);
@@ -163,6 +172,7 @@ int main() {
 						p.x++;
 						m.x -= 50;
 						moveItens(&pegar, -50, 0);
+						moveItens(&final, -50, 0);
 						verificaPegouItem(p, &pegar, &inventario);
 					}
 					break;
@@ -176,6 +186,7 @@ int main() {
 						p.x--;
 						m.x += 50;
 						moveItens(&pegar, 50, 0);
+						moveItens(&final, 50, 0);
 						verificaPegouItem(p, &pegar, &inventario);
 					}
 					break;
@@ -189,6 +200,7 @@ int main() {
 						p.y--;
 						m.y += 50;
 						moveItens(&pegar, 0, 50);
+						moveItens(&final, 0, 50);
 						verificaPegouItem(p, &pegar, &inventario);
 					}
 					break;
@@ -202,6 +214,7 @@ int main() {
 						p.y++;
 						m.y -= 50;
 						moveItens(&pegar, 0, -50);
+						moveItens(&final, 0, -50);
 						verificaPegouItem(p, &pegar, &inventario);
 					}
 					break;
