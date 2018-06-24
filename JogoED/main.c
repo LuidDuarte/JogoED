@@ -57,7 +57,7 @@ int main() {
 	ALLEGRO_BITMAP * menu = NULL;
 	ALLEGRO_BITMAP * menuT = NULL;
 	ALLEGRO_BITMAP * menuE = NULL;
-	ALLEGRO_DISPLAY* janela = al_create_display(800, 600);
+	ALLEGRO_DISPLAY* janela = al_create_display(800, 700);
 	ALLEGRO_BITMAP *buffer = NULL;
 	ALLEGRO_BITMAP *moldura = NULL;
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
@@ -76,8 +76,7 @@ int main() {
 
 	ALLEGRO_EVENT events;
 	menu = al_load_bitmap("D:\\3o Semestre\\ED\\Jogo\\JogoED\\imagens\\ilha.png");
-	menuT= al_load_bitmap("D:\\3o Semestre\\ED\\Jogo\\JogoED\\imagens\\ilhatoe.png");
-	menuE= al_load_bitmap("D:\\3o Semestre\\ED\\Jogo\\JogoED\\imagens\\ilhaearl.png");
+
 
 
 	m.imagem = al_load_bitmap("..\\imagens\\1500x800fase1.png");
@@ -94,40 +93,27 @@ int main() {
 
 	while (!done) {
 		if (ESTADO == _MENU) {
-			
-			al_draw_bitmap(menuatual, 0, 0, 0);
+
+			al_draw_bitmap(menu, 0, 0, 0);
 			al_flip_display();
 			al_wait_for_event(event_queue, &events);
-									
-			if (events.type == ALLEGRO_EVENT_MOUSE_AXES) {
-				mouseX = events.mouse.x;
-				mouseY = events.mouse.y;
-				
-				jogar = mouseX > 309 && mouseX < 501 && mouseY > 267 && mouseY < 362;
-						
-			}
-			else if (events.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-			
-				if (mouseX > 140 && mouseX < 301 && mouseY > 418 && mouseY < 481) {
-					p1click = true;
-					menuatual = menuT;
-					p2click = false;
-				}
-				else if (mouseX > 509 && mouseX < 606 && mouseY > 418 && mouseY < 481) {
-					p2click = true;
-					menuatual = menuE;
-					p1click = false;
-				}
-				if (jogar && p1click ) {
+
+			if (events.type == ALLEGRO_EVENT_KEY_CHAR) {
+				switch (events.keyboard.keycode) {
+				case ALLEGRO_KEY_ESCAPE:
+					done = 1;
+					break;
+				case ALLEGRO_KEY_T:
 					ESTADO = _JOGO;
 					carregaToeJam(&p);
-				}
-				else if (jogar && p2click) {
+					break;
+				case ALLEGRO_KEY_E:
 					ESTADO = _JOGO;
 					carregaEarl(&p);
+					break;
+
 				}
 			}
-			
 		}
 
 		else if (ESTADO == _JOGO) {

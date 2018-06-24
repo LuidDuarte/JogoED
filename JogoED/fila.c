@@ -56,7 +56,7 @@ obj inicioFila(Fila *fi) {
 }
 
 void mostraItemMapa(Fila *pegar) {
-	
+
 	elemento *aux = pegar->inicio;
 	if (pegar->inicio != NULL) {
 		while (aux != NULL) {
@@ -67,7 +67,7 @@ void mostraItemMapa(Fila *pegar) {
 }
 
 void verificaPegouItem(personagem p, Fila *pegar, Pilha *inventario) {
-	if(pegar->inicio != NULL){
+	if (pegar->inicio != NULL) {
 		obj objeto = inicioFila(pegar);
 
 		if ((objeto.mX == p.x) && (objeto.mY == p.y)) {
@@ -112,9 +112,9 @@ void mostraPegar(Fila *pegar) {
 }
 
 void dropItem(Pilha *inventario, Fila *pegar, personagem p) {
-	if(*inventario != NULL){
+	if (*inventario != NULL) {
 		obj objeto = topoPilha(inventario);
-		objeto.bX = 355;
+		objeto.bX = 155;
 		objeto.bY = posYPegar;
 		objeto.mX = p.x;
 		objeto.mY = p.y;
@@ -150,9 +150,9 @@ void reiniciaJogo(Fila *pegar, Pilha *inventario, obj *elevador, personagem *p, 
 	p->y = 5;
 	m->x = -250; //Para que no centro, onde ficar� o personagem, tenha continente. (lembrar sempre disso quando comparar posi��es na matriz, somar esses n�meros e dividir por 50)
 	m->y = -50;
-	posXPegar = 305;
+	posXPegar = 105;
 	posYPegar = 430;
-	posXInventario = 475;
+	posXInventario = 275;
 	posYInventario = 535;
 
 	destroiPilha(inventario);

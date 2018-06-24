@@ -26,9 +26,9 @@ typedef struct elemento {
 }elemento;
 
 // Globais.
-static int posXPegar = 305;
+static int posXPegar = 105;
 static int posYPegar = 430;
-static int posXInventario = 475;
+static int posXInventario = 275;
 static int posYInventario = 535;
 
 obj criaObjeto(int num);
