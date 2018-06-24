@@ -1,10 +1,12 @@
 #include <allegro5\allegro.h>
 #include "personagem.h"
 #include "mapa.h"
+
 #ifndef ITEM_H
 #define ITEM_H
 
 typedef struct obj { 
+	int id;
 	//Coordenada mapa;
 	int cY;
 	int cX;
@@ -14,30 +16,26 @@ typedef struct obj {
 	//Coordenada x,y (em px) para borda
 	int bY;
 	int bX;
-	ALLEGRO_BITMAP *item;
+	char item[300];
 
 }obj;
 
-static int posXPegar = 355;
-static int posYPegar = 430;
-static int posXInvetario = 475;
-static int posYInvetario = 535;
-typedef struct no {
+typedef struct elemento {
 	obj objeto;
-	struct no* prox;
-}no;
+	struct elemento *prox;
+}elemento;
 
-typedef no* lista;
+// Globais.
+static int posXPegar = 305;
+static int posYPegar = 430;
+static int posXInventario = 475;
+static int posYInventario = 535;
 
-void verificaPegouItem(personagem p, lista *pegar, lista *inventario);
-void removerNo(lista *l, no *n);
-void adicionaNo(lista *l, no *n);
-void mudaNo(lista *l, no *n);
-void moveItens(lista *pegar, int x, int y);
-void mostraItemMapa(lista *l);
-void mostraListaInventario(lista *l);
+obj criaObjeto(int num);
+obj criaElevador();
+
+/*
 void inicializaLista(lista *l);
-no *criaNo(int listaPegar);
 void inicializaGame(lista*, lista*, lista*, mapa*,  personagem*);
-
+*/
 #endif // !ITEM_H

@@ -11,7 +11,8 @@
 #include "personagem.h"
 #include "mapa.h"
 #include "item.h"
-
+#include "fila.h"
+#include "pilha.h"
 
 
 #define false 0 //caso o compilador seja antigo e ainda n�o tenha bool.
@@ -19,12 +20,11 @@
 #define FPS 60
 
 //variaveis globais
-
 enum {
 	_MENU,
 	_JOGO
 };
-
+static int ESTADO = _MENU;
 
 int main() { 
 	srand(time(NULL));
@@ -33,11 +33,10 @@ int main() {
 	al_install_keyboard();
 	al_install_mouse();
 
-	lista pegar, inventario, final;
-	inicializaLista(&pegar);
-	inicializaLista(&inventario);
-	inicializaLista(&final);
-
+	Fila pegar = inicializaFila();
+	Pilha inventario = criaPilha();
+	obj elevador = criaElevador();
+		
 	personagem p;
 	p.x = 12;
 	p.y = 5;
@@ -87,17 +86,11 @@ int main() {
 	p.animacao = 0;
 
 	ALLEGRO_BITMAP *menuatual = menu;
-	int ESTADO = _MENU;
 	int mouseX = 0, mouseY = 0;
 	bool jogar = false, p1click=false, p2click=false;
 	
 	al_start_timer(timer);
 
-
-	for (int i = 0; i <= 5; i++) {
-		adicionaNo(&pegar, criaNo(1));
-	}
-	adicionaNo(&final, criaNo(0));
 
 	while (!done) {
 		if (ESTADO == _MENU) {
@@ -140,20 +133,13 @@ int main() {
 		else if (ESTADO == _JOGO) {
 			tempo1 = al_get_time();
 			al_draw_bitmap(m.imagem, m.x, m.y, 0);
-			if (pegar == NULL) {
-				mostraItemMapa(&final);
-				if (final->objeto.mX == p.x && final->objeto.mY == p.y) {
-				ESTADO = _MENU;
-				inicializaGame(&pegar, &final, &inventario, &m, &p);
-				menuatual = menu;
-				}
-			}
-
+			if (pegar.inicio == NULL) al_draw_bitmap(al_load_bitmap(elevador.item), elevador.cX, elevador.cY, 0);
 			mostraItemMapa(&pegar);
 			al_draw_bitmap(p.personagem[p.animacao], 320, 200, 0);
 			al_draw_bitmap(moldura, 0, 0, 0);
-			mostraListaInventario(&pegar);
-			mostraListaInventario(&inventario);
+			mostraPegar(&pegar);
+			mostraInventario(&inventario);
+
 			al_flip_display();
 			al_wait_for_event(event_queue, &events);
 
@@ -171,9 +157,12 @@ int main() {
 					if (map1[p.y][p.x+1] == 1) {
 						p.x++;
 						m.x -= 50;
-						moveItens(&pegar, -50, 0);
-						moveItens(&final, -50, 0);
+						moveItens(&pegar, -50, 0, &elevador);
 						verificaPegouItem(p, &pegar, &inventario);
+						if ((pegar.inicio == NULL) && (verificaFim(inventario) == 1) && (elevador.mX == p.x) && (elevador.mY == p.y)){
+							ESTADO = _MENU;
+							reiniciaJogo(&pegar, &inventario, &elevador, &p, &m);
+						}
 					}
 					break;
 
@@ -185,9 +174,12 @@ int main() {
 					if (map1[p.y][p.x-1] == 1) {
 						p.x--;
 						m.x += 50;
-						moveItens(&pegar, 50, 0);
-						moveItens(&final, 50, 0);
+						moveItens(&pegar, 50, 0, &elevador);
 						verificaPegouItem(p, &pegar, &inventario);
+						if ((pegar.inicio == NULL) && (verificaFim(inventario) == 1) && (elevador.mX == p.x) && (elevador.mY == p.y)){ 
+							ESTADO = _MENU;
+							reiniciaJogo(&pegar, &inventario, &elevador, &p, &m);
+						}
 					}
 					break;
 
@@ -199,9 +191,12 @@ int main() {
 					if (map1[p.y-1][p.x] == 1) {
 						p.y--;
 						m.y += 50;
-						moveItens(&pegar, 0, 50);
-						moveItens(&final, 0, 50);
+						moveItens(&pegar, 0, 50, &elevador);
 						verificaPegouItem(p, &pegar, &inventario);
+						if ((pegar.inicio == NULL) && (verificaFim(inventario) == 1) && (elevador.mX == p.x) && (elevador.mY == p.y)){
+							ESTADO = _MENU;
+							reiniciaJogo(&pegar, &inventario, &elevador, &p, &m);
+						}
 					}
 					break;
 
@@ -213,13 +208,22 @@ int main() {
 					if (map1[p.y+1][p.x] == 1) {
 						p.y++;
 						m.y -= 50;
-						moveItens(&pegar, 0, -50);
-						moveItens(&final, 0, -50);
+						moveItens(&pegar, 0, -50, &elevador);
 						verificaPegouItem(p, &pegar, &inventario);
+						if ((pegar.inicio == NULL) && (verificaFim(inventario) == 1) && (elevador.mX == p.x) && (elevador.mY == p.y)){
+							ESTADO = _MENU;
+							reiniciaJogo(&pegar, &inventario, &elevador, &p, &m);
+						}
 					}
 					break;
-				case ALLEGRO_KEY_L:
-					system("cls");
+
+				case ALLEGRO_KEY_SPACE:
+					dropItem(&inventario, &pegar, p);
+					break;
+
+				case ALLEGRO_KEY_M:
+					ESTADO = _MENU;
+					reiniciaJogo(&pegar, &inventario, &elevador, &p, &m);
 					break;
 
 				default:
